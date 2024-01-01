@@ -48,9 +48,7 @@ fn main() {
                     avg_a /= hist.len() as f64;
                     avg_b /= hist.len() as f64;
 
-                    // println!("breakpoint 1");
                     let new_brightness: u8 = create_brightness_value(offset, &buf);
-                    // println!("breakpoint 2");
                     hist.insert(0, (new_brightness as u32, middle_half_average(&buf).unwrap() as u8));
 
                     if initialized {
