@@ -1,0 +1,12 @@
+[package]
+name = "brightcast"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+image = "0.24.7"
+regex = "1.10.2"
+v4l = "0.14.0"
+
