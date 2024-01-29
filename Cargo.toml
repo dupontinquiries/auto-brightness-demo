@@ -1,12 +1,24 @@
 [package]
-name = "brightcast"
+name = "brightcast-gui"
 version = "0.1.0"
-edition = "2021"
+authors = ["Kessler DuPont-Teevin <big.siilcon@proton.me>"]
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+description = "app to automatically adapt screen brightnees to ambient light"
+repository = ""
+documentation = ""
+license = "GPLv3"
+categories = ["display"]
+readme = "README.md"
+edition = "2021"
+include = ["README.md", "Cargo.toml", "src/", "qml/"]
 
 [dependencies]
+cxx = "1.0.83"
+cxx-qt = "0.5"
+cxx-qt-lib = "0.5"
 image = "0.24.7"
 regex = "1.10.2"
 v4l = "0.14.0"
 
+[build-dependencies]
+cxx-qt-build = "0.5"

@@ -6,76 +6,36 @@ use std::collections::HashMap;
 use std::process::Command;
 use regex::Regex;
 
-fn mean(list: &[u8]) -> f64
+fn mean(data: &[u8]) -> f64 {
+    let mut sum = 0u32;
+    for el in data.into_iter() {
+        sum += *el as u32;
+    }
+    sum as f64 / data.len() as f64
+}
+
+// TODO lock this value list for multithreading
+// - prevents size from changing during the function
+pub fn middle_half_average(values: &[u8]) -> Option<f64>
 {
-    let mut sum: i32 = 0i32;
-    for i in 0..list.len() {
-        sum += list[i] as i32;
-    }
-    f64::from(sum) / (list.len() as f64)
-}
-
-fn max(list: &[u8]) -> u8
-{
-    let mut max_num = &list[0];
-    for i in 0..list.len() {
-        if *max_num < list[i] {
-            max_num = &list[i];
-        }
-    }
-    max_num.clone()
-}
-
-fn mode_map(m: &HashMap<u8, u32>) -> Option<&u8> {
-    let mut max_num = None;
-    let mut max_count = 0u32;
-
-    for (k, &v) in m.iter() {
-        if v > max_count {
-            max_count = v;
-            max_num = Some(k);
-        }
-    }
-
-    max_num
-}
-
-fn mode(list: &[u8]) -> Option<u8> {
-    let mut m: HashMap<u8, u32> = HashMap::new();
-
-    for &it in list.iter() {
-        let count = m.entry(it).or_insert(0);
-        *count += 1;
-    }
-
-    mode_map(&m).cloned()
-}
-
-pub fn middle_half_average(values: &[u8]) -> Option<f64> {
-    // Ensure the input list is not empty
     if values.is_empty() {
         return None;
     }
 
-    // Sort the values
+    let len: u32 = values.len() as u32;
+    let quartile1: u32 = len / 4u32;
     let mut sorted_values = values.to_vec();
     sorted_values.sort();
+    // sorted_values = sorted_values[quartile1 as usize..(3 * quartile1) as usize].to_vec();
 
-    // Calculate the index range for the upper quartile
-    let len = sorted_values.len();
-    let start_index = (1 * len) / 4;
-    let end_index = (3 * len) / 4;
-
-    // Calculate the sum of values in the upper quartile
-    let sum: u32 = sorted_values.iter().skip(start_index).map(|&x| u32::from(x)).sum();
-
-    // Calculate the average
-    let count = (end_index - start_index + 1) as f64;
-    let average = f64::from(sum) / count;
-
-    Some(average)
+    let mut sum: i32 = 0i32;
+    for i in quartile1 as usize..(3usize * quartile1 as usize) as usize {
+        sum += sorted_values[i] as i32;
+    }
+    Some(f64::from(sum) / len as f64)
 }
 
+// pub for camera
 pub fn create_brightness_value(offset: i32, data: &[u8]) -> u8
 {
     (
