@@ -21,11 +21,6 @@ fn main() {
     let daemon: Arc<Mutex<Daemon>> = setup_camera_daemon();
     launch_window(daemon.clone());
 }
-     max_num = &list[i];
-        }
-    }
-    max_num
-}
 
 fn mode_map(m: &HashMap<u8, u32>) -> Option<&u8> {
     let mut max_num = None;
